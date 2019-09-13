@@ -1,0 +1,8 @@
+Como compilar:
+
+Abra o terminal, no terminal entre na pasta que contém os arquivos com os códigos e os arquivos de texto, e para rodar digite os seguintes comandos. 
+
+ENCRIPTOGRAFAR:
+	pyhton encriptar.py "nome_do_arquivo_que_contém_o_texto_a_ser_encriptado" "chave"
+DESENCRIPTOGRAFAR:
+	pyhton desencriptar.py "desencriptografado.txt" "chave"

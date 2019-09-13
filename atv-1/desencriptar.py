@@ -1,5 +1,64 @@
 import sys
-
+def bini(i):
+	aux = [0,0,0,0,0,0,0,0]
+	byte = bin(ord(i));
+	r = 0
+	for j in range(9-len(byte),9):
+		if r == 0 or r == 1:
+			pass
+		else:
+			aux[j-1]=int(byte[r]);
+		r = r+1	
+	return aux
+def perm_IP(aux):
+	IP = [2,6,3,1,4,8,5,7]
+	perm1 = [0,0,0,0,0,0,0,0]
+	for j in range(0,8):
+		perm1[j] = aux[IP[j]-1]
+	return perm1
+def perm_IPi(aux):
+	IPi =[4,1,3,5,7,2,8,6]
+	perm1 = [0,0,0,0,0,0,0,0]
+	for j in range(0,8):
+		perm1[j] = aux[IPi[j]-1]
+	return perm1
+def perm_EP(perm1):
+	EP = [3,0,1,2,1,2,3,0]
+	perm2 = [0,0,0,0,0,0,0,0]
+	for j in range(0,8):
+		perm2[j] = perm1[EP[j]+4]
+	return perm2
+def function(perm2,perm1,key):
+	lista = [0,0,0,0,0,0,0,0]
+	ultima = [0,0,0,0,0,0,0,0]
+	mid = [0,0,0,0]
+	l = [0,0,0,0]
+	P4 = [2,4,3,1]
+	S0 = [[1,0,3,2],[3,2,1,0],[0,2,1,3],[3,1,3,2]]
+	S1 = [[1,1,2,3],[2,0,1,3],[3,0,1,0],[2,1,0,3]]
+	atual = xor(key,perm2,lista)
+	linha1 = transbd(atual[0],atual[3])
+	coluna1 = transbd(atual[1],atual[2])
+	valor1 = transdb(S0[linha1][coluna1])
+	linha2 = transbd(atual[4],atual[7])
+	coluna2 = transbd(atual[5],atual[6])
+	valor2 = transdb(S1[linha2][coluna2])
+	valor = valor1+valor2
+	for j in range(0,4):
+		mid[j] = int(valor[P4[j]-1]) 
+	valor = xor(mid,perm1[:4],l)
+	for j in range(0,4):
+		ultima[j] = valor[j]
+	for j in range(4,8):
+		ultima[j] = perm1[j]
+	return ultima
+def switch(ultima):
+	final = [0,0,0,0,0,0,0,0]
+	for j in range(0,4):
+		final[j] = ultima[j+4]
+	for j in range(4,8):  
+		final[j] = ultima[j-4]
+	return final
 def transbd(v1,v2):
 	if(v1 == 0 and v2 == 0):
 		return 0
@@ -82,81 +141,26 @@ except:
 text = in_file.read()
 in_file.close()
 out_file = open('descriptografado.txt', "w")
-IP = [2,6,3,1,4,8,5,7]
-IPi =[4,1,3,5,7,2,8,6]
-EP = [3,0,1,2,1,2,3,0]
-S0 = [[1,0,3,2],[3,2,1,0],[0,2,1,3],[3,1,3,2]]
-S1 = [[1,1,2,3],[2,0,1,3],[3,0,1,0],[2,1,0,3]]
-P4 = [2,4,3,1]
-perm1 = [0,0,0,0,0,0,0,0]
-perm2 = [0,0,0,0,0,0,0,0]
-aux = [0,0,0,0,0,0,0,0]
-lista = [0,0,0,0,0,0,0,0]
-ultima = [0,0,0,0,0,0,0,0]
-mid = [0,0,0,0]
-l = [0,0,0,0]
-for i in range(0,len(text)):
-	byte = bin(ord(text[i]));
-	r = 0
-	for j in range(9-len(byte),9):
-		if r == 0 or r == 1:
-			pass
-		else:
-			aux[j-1]=int(byte[r]);
-		r = r+1	
-	for j in range(0,8):
-		perm1[j] = aux[IP[j]-1]
-	for j in range(0,8):
-		perm2[j] = perm1[EP[j]]
-	key = gerarChaves(2,sys.argv[2])
-	atual = xor(key,perm2,lista)
-	linha1 = transbd(atual[0],atual[3])
-	coluna1 = transbd(atual[1],atual[2])
-	valor1 = transdb(S0[linha1][coluna1])
-	linha2 = transbd(atual[4],atual[7])
-	coluna2 = transbd(atual[5],atual[6])
-	valor2 = transdb(S1[linha2][coluna2])
-	valor = valor1+valor2
-	for j in range(0,4):
-		mid[j] = int(valor[P4[j]-1]) 
-	valor = xor(mid,perm1[:4],l)
-	for j in range(0,4):
-		ultima[j] = perm1[j+4]
-	for j in range(4,8):
-		ultima[j] = valor[j-4]
+key1 = gerarChaves(1,sys.argv[2])
+key2 = gerarChaves(2,sys.argv[2])
+for x in text:
 
-	final = [0,0,0,0,0,0,0,0]
-	aux = [0,0,0,0,0,0,0,0]
-	lista = [0,0,0,0,0,0,0,0]
-	mid = [0,0,0,0]
-	l = [0,0,0,0]
+	aux = bini(x)
+	perm1 = perm_IP(aux)
 
-	for j in range(0,8):
-		perm2[j] = ultima[EP[j]] 
-	key = gerarChaves(1,sys.argv[2])
-	atual = xor(key,perm2,lista)
-	linha1 = transbd(atual[0],atual[3])
-	coluna1 = transbd(atual[1],atual[2])
-	valor1 = transdb(S0[linha1][coluna1])
-	linha2 = transbd(atual[4],atual[7])
-	coluna2 = transbd(atual[5],atual[6])
-	valor2 = transdb(S1[linha2][coluna2])
-	valor = valor1+valor2
-	for j in range(0,4):
-		mid[j] = int(valor[P4[j]-1]) 
-	valor = xor(mid,ultima[:4],l)
-	for j in range(4,8):
-		lista[j] = ultima[j]
-	for j in range(0,4):
-		lista[j] = valor[j]
-	for j in range(0,8):
-		final[j] = lista[IPi[j]-1]
-	a = ''
-	for j in range(0,8):
-		a = a + str(final[j])	
+	perm2 = perm_EP(perm1)	
+	meio = function(perm2,perm1,key2)
+	prox = switch(meio)
 
+	perm3 = perm_EP(prox)
+	fim = function(perm3,prox,key1)
+
+	letra = perm_IPi(fim)
+	a =''
+	for x in letra:
+		a += str(x)
 	b = int(a,2)
-	out_file.write(chr(b))
+	out_file.write(chr(b))	
 	
 out_file.close()
 	
