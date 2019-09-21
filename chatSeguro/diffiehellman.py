@@ -8,6 +8,15 @@ class DiffieHellman:
 		Ya = self.a**self.XA % self.q
 		return Ya	
 
+	def setQ(self, q):
+		self.q = q
+
+	def setA(self, a):
+		self.a = a
+
+	def setXA(self, XA):
+		self.XA = XA
+
 	def getChave(self, Yb):
 		l = ""
 		k = (Yb)**self.XA % self.q
