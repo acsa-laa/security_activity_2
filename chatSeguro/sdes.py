@@ -255,8 +255,7 @@ class SDESD:
 		listaP8 = [6,3,7,4,8,5,10,9];
 		key = [0,0,0,0,0,0,0,0,0,0]
 		final = [0,0,0,0,0,0,0,0]
-
-		for i in range(0,10):
+                for i in range(0,10):
 			key[i] = chave[listaP10[i]-1];
 
 		for i in range(0,5):
