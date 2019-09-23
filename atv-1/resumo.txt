@@ -1,16 +1,48 @@
-O modo mais simples de criptografia é o electronic codebook(ECB). A mensagem é dividida em blocos e cada bloco é criptografado separadamente. A desvantagem deste método é que blocos idênticos de texto plano são criptografados em blocos de texto cifrado idênticos; assim, ele também não oculta padrões de dados. No geral, não oferece uma perfeita confidencialidade de mensagem, e não é recomendado para uso em protocolos criptográficos em geral.
+Modo ECB:
+
+    • O modo mais simples de criptografia. 
+    • A mensagem é dividida em blocos e cada bloco é criptografado separadamente. 
+    • A desvantagem deste método é que blocos idênticos de texto plano são criptografados em blocos de texto cifrado idênticos; assim, ele também não oculta padrões de dados. 
+    • Não oferece uma perfeita confidencialidade de mensagem, e não é recomendado para uso em protocolos criptográficos em geral.
+
+Modo CBC:
+
+    • Criptografia de Blocos Encadeados
+    • A cada bloco de texto simples é aplicada uma função XOR junto com o bloco cifrado anterior antes do texto ser criptografado. 
+    • Dependente de todos os blocos de texto simples processados até este momento. 
+    • Além disso, para que cada mensagem seja única, mesmo de um mesmo texto original, um vector de inicialização único deve ser utilizado no primeiro bloco, preferencialmente gerado aleatoriamente.
+    • Sua desvantagem é a criptografia sequencial (não pode ser paralelizada), e a mensagem deve ser alinhada de acordo com um múltiplo do tamanho do bloco de cifra. 
+    • A mudança de um bit no texto simples original afeta todos os blocos cifrados subsequentes, e um texto simples pode ser recuperado de apenas dois blocos adjacentes do texto cifrado.
+    • A mudança de um bit no texto cifrado corrompe completamente o bloco do texto simples e inverte o bit correspondente no bloco de texto simples seguinte.
 
 
-No modo de criptografia CBC (Cypher Block Chaining - Criptografia de Blocos Encadeados), a cada bloco de texto simples é aplicada uma função XOR junto com o bloco cifrado anterior antes do texto ser criptografado. Desta forma, cada bloco cifrado fica dependente de todos os blocos de texto simples processados até este momento. Além disso, para que cada mensagem seja única, mesmo de um mesmo texto original, um vector de inicialização único deve ser utilizado no primeiro bloco, preferencialmente gerado aleatoriamente.
-Se o primeiro bloco tiver o índice 1, a formula matemática para a criptografia CBC é a seguinte:
-e a formula matemática para descriptografia CBC é a seguinte:
-O CBC tem sido o modo de operação geralmente mais utilizado. Suas principais desvantagens são que a criptografia é sequencial (não pode ser paralelizada), e a mensagem deve ser alinhada de acordo com um múltiplo do tamanho do bloco de cifra. Uma maneira de atender este último caso, é através da técnica conhecida como ciphertext stealing.
-Observe que a mudança de um bit no texto simples original afeta todos os blocos cifrados subsequentes, e um texto simples pode ser recuperado de apenas dois blocos adjacentes do texto cifrado. Como consequência, a descriptografia pode ser paralelizada, a mudança de um bit no texto cifrado corrompe completamente o bloco do texto simples e inverte o bit correspondente no bloco de texto simples seguinte.
+Modo CFB:
+      
+    • A entrada é processada j bits de cada vez. 
+    • O texto cifrado anterior é usado como entrada para o algoritmo criptográfico de forma a produzir uma saída pseudo-aleatória, que é o XOR com o texto claro para produzir a próxima unidade de texto cifrado. 
+    • A mensagem é tratada como um fluxo de bits. 
+    • Resultado de um bloco é usado para o bloco seguinte. 
+    • Consequentemente, reordenar os textos cifrados afeta a operação de decifrar. 
+    • Um ou mais bits de erro em um único bloco de texto cifrado de r-bits, afeta a decifração de seu próprio bloco,assim como os próximos [n/r] blocos seguintes.
+
+Modo OFB:
+
+    • Semelhante ao CFB, exceto que a entrada do algoritmo criptográfico é a saída DES anterior.
+    • Mensagem tratada como um fluxo de bits.
+    • Saída da cifra é adicionada à mensagem por XOR.
+    • Pode ser computada com antecedência pois a saída da cifra é a realimentação. 
+    • Um ou mais bits de erro em qualquer caracter de um texto cifrado comprometerá apenas a decifração daquele bloco, na precisa posição do erro.
+    • É recomendado que a primeira aplicação do XOR, que não necessita ser secreto, deva ser alterado se uma chave K puder ser reusada no modo OFB. 
+    • Também não deve ser empregado quando o algoritmo for uma cifra de bloco de chave pública.
 
 
-Modo CFB (Cipher feedback)
-a entrada é processada j bits de cada vez. O texto cifrado anterior é usado como entrada para o algoritmo criptográfico de forma a produzir uma saída pseudo-aleatória, que é o XOR com o texto claro para produzir a próxima unidade de texto cifrado. A mensagem é tratada como um fluxo de bits. Resultado de um bloco é usado para o bloco seguinte.
-Modo OFB (Output feedback)
-semelhante ao CFB, exceto que a entrada do algoritmo criptográfico é a saída DES anterior. Mensagem tratada como um fluxo de bits, saída da cifra é adicionada à mensagem por XOR, pode ser computada com antecedência pois a saída da cifra é a realimentação.
-Modo CTR (Counter)[editar | editar código-fonte]
-nova proposta, cada bloco de texto claro é XOR com um contador criptografado. O contador é incrementado para cada bloco subsequente. Semelhante ao OFB, porém a realimentação é o contador.
+Modo CTR:
+      
+    • Nova proposta.
+    •  Cada bloco de texto claro é XOR com um contador criptografado. 
+    • O contador é incrementado para cada bloco subsequente. 
+    • Semelhante ao OFB, porém a realimentação é o contador. 
+    • Tem vantagens de eficiência significantes sobre os modos de operação de confidencialidade padronizados, sem reduzir a segurança. 
+    • A maior parte das desvantagens percebidas do CTR não são críticas válidas, mas causada por falta de conhecimento. 
+    • O CTR permite um acesso randômico real. 
+    • O bloco de texto cifrado i não necessita ser decifrado antes do bloco i+1.
